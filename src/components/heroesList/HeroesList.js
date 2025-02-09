@@ -38,8 +38,8 @@ const HeroesList = () => {
       return <h5 className="text-center mt-5">Героев пока нет</h5>;
     }
 
-    return arr.map(({ id, ...props }) => {
-      return <HeroesListItem key={id} {...props} />;
+    return arr.map((item) => {
+      return <HeroesListItem key={item.id} {...item} />;
     });
   };
 

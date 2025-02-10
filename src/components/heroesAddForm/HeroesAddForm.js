@@ -1,3 +1,9 @@
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
+import { heroesAdd } from '../../actions';
+import { useHttp } from '../../hooks/http.hook';
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
 // в общее состояние и отображаться в списке + фильтроваться
@@ -9,20 +15,52 @@
 // данных из фильтров
 
 const HeroesAddForm = () => {
+  const { filters, filtersLoadingStatus } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const { request } = useHttp();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    const newHero = {
+      id: uuidv4(),
+      ...data,
+    };
+    request('http://localhost:3001/heroes', 'POST', JSON.stringify(newHero))
+      .then(() => {
+        dispatch(heroesAdd(newHero));
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        reset();
+      });
+  };
+
   return (
-    <form className="border p-4 shadow-lg rounded">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="border p-4 shadow-lg rounded"
+    >
       <div className="mb-3">
         <label htmlFor="name" className="form-label fs-4">
           Имя нового героя
         </label>
         <input
-          required
           type="text"
-          name="name"
           className="form-control"
-          id="name"
           placeholder="Как меня зовут?"
+          {...register('name', { required: true })}
         />
+        {errors.name && (
+          <span style={{ color: 'darkred' }}>This field is required</span>
+        )}
       </div>
 
       <div className="mb-3">
@@ -30,28 +68,41 @@ const HeroesAddForm = () => {
           Описание
         </label>
         <textarea
-          required
-          name="text"
           className="form-control"
-          id="text"
           placeholder="Что я умею?"
           style={{ height: '130px' }}
+          {...register('text', { required: true })}
         />
+        {errors.text && (
+          <span style={{ color: 'darkred' }}>This field is required</span>
+        )}
       </div>
 
       <div className="mb-3">
         <label htmlFor="element" className="form-label">
           Выбрать элемент героя
         </label>
-        <select required className="form-select" id="element" name="element">
-          <option>Я владею элементом...</option>
-          <option value="fire">Огонь</option>
-          <option value="water">Вода</option>
-          <option value="wind">Ветер</option>
-          <option value="earth">Земля</option>
-        </select>
+        {(filtersLoadingStatus === 'loading') === 0 && <div>Loading...</div>}
+        {filtersLoadingStatus === 'idle' && filters.length && (
+          <select
+            className="form-select"
+            {...register('element', { required: true })}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              Я владею элементом...
+            </option>
+            {filters.map((item) => {
+              if (item.name === 'all') return;
+              return (
+                <option key={item.id} value={item.name}>
+                  {item.label}
+                </option>
+              );
+            })}
+          </select>
+        )}
       </div>
-
       <button type="submit" className="btn btn-primary">
         Создать
       </button>

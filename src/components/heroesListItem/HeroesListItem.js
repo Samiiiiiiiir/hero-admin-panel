@@ -28,9 +28,9 @@ const HeroesListItem = ({ name, description, element, id }) => {
   }
 
   function handleDelete() {
-    request(`http://localhost:3001/heroes/${id}`, 'DELETE').then(() =>
-      dispatch(heroesDelete(id))
-    );
+    request(`http://localhost:3001/heroes/${id}`, 'DELETE')
+      .then(() => dispatch(heroesDelete(id)))
+      .catch((err) => console.error(err));
   }
 
   return (

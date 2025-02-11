@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { heroesDelete } from '../../actions';
 import { useHttp } from '../../hooks/http.hook';
 
-const HeroesListItem = ({ name, description, element, id }) => {
+const HeroesListItem = ({ name, text, element, id }) => {
   let elementClassName;
 
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const HeroesListItem = ({ name, description, element, id }) => {
       />
       <div className="card-body">
         <h3 className="card-title">{name}</h3>
-        <p className="card-text">{description}</p>
+        <p className="card-text">{text}</p>
       </div>
       <span
         onClick={handleDelete}

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
-import { heroesAdd } from '../../actions';
+import { heroCreated } from '../../components/heroesList/heroesSlice';
 import { useHttp } from '../../hooks/http.hook';
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
@@ -35,7 +35,7 @@ const HeroesAddForm = () => {
     };
     request('http://localhost:3001/heroes', 'POST', JSON.stringify(newHero))
       .then(() => {
-        dispatch(heroesAdd(newHero));
+        dispatch(heroCreated(newHero));
       })
       .catch((err) => {
         console.log(err);

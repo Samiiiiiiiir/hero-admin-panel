@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useHttp } from '../../hooks/http.hook';
-import { fetchFilters, changeActiveFilter } from './../../actions/index';
+import { fetchFilters } from '../../actions/index';
+
+import { activeFilterChange } from './filtersSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Задача для этого компонента:
@@ -38,7 +40,7 @@ const HeroesFilters = () => {
                   className={`btn ${item.className} ${
                     activeFilter == item.name ? 'active' : ''
                   }`}
-                  onClick={() => dispatch(changeActiveFilter(item.name))}
+                  onClick={() => dispatch(activeFilterChange(item.name))}
                 >
                   {item.label}
                 </button>

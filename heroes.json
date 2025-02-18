@@ -1,28 +1,9 @@
 {
   "heroes": [
     {
-      "id": "b86a949c-4ed4-4a0c-ab0e-0623b315ee54",
-      "name": "3",
-      "text": "3",
-      "element": "wind"
-    },
-    {
-      "id": "860a5dae-e7e6-4057-a34c-45091fa44beb",
+      "id": "697c2489-2e60-40fa-9631-f7726f1f1147",
       "name": "1",
-      "text": "1",
-      "element": "water"
-    },
-    {
-      "id": "f9601315-8d10-4b1d-bc63-05e30b366c04",
-      "name": "6",
-      "text": "6",
-      "element": "fire"
-    },
-    {
-      "id": "f9adc9dd-d282-4e6e-864e-7c92242c581e",
-      "name": "6758576",
-      "text": "678867",
-      "element": "wind"
+      "text": "1"
     }
   ],
   "filters": [

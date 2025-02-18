@@ -1,9 +1,13 @@
-import { createAction } from '@reduxjs/toolkit';
+import {
+  filterFetching,
+  filterFetched,
+  filterFetchedError,
+} from '../components/heroesFilters/filtersSlice';
 
 import {
   heroesFetching,
   heroesFetched,
-  heroesFetching,
+  heroesFetchingError,
 } from './../components/heroesList/heroesSlice';
 
 export const fetchHeroes = (request) => (dispatch) => {
@@ -14,16 +18,8 @@ export const fetchHeroes = (request) => (dispatch) => {
 };
 
 export const fetchFilters = (request) => (dispatch) => {
-  dispatch(filtersFetching());
+  dispatch(filterFetching());
   request('http://localhost:3001/filters')
-    .then((data) => dispatch(filtersFetched(data)))
-    .catch(() => dispatch(filtersFetchingError()));
+    .then((data) => dispatch(filterFetched(data)))
+    .catch(() => dispatch(filterFetchedError()));
 };
-
-export const filtersFetching = createAction('FILTER_FETCHING');
-
-export const filtersFetchingError = createAction('FILTER_FETCHING_ERROR');
-
-export const filtersFetched = createAction('FILTER_FETCHED');
-
-export const changeActiveFilter = createAction('FILTER_ACTIVE_CHANGE');

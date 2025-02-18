@@ -1,8 +1,7 @@
 /* import thunk from 'redux-thunk'; */
+import { configureStore } from '@reduxjs/toolkit';
 
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
-
-import heroes from '../reducers/heroes';
+import heroes from './../components/heroesList/heroesSlice';
 import filters from '../reducers/filters';
 
 const stringMiddleware = () => {
@@ -16,12 +15,14 @@ const stringMiddleware = () => {
   };
 };
 
-const store = createStore(
-  combineReducers({ heroes, filters }),
-  compose(
-    applyMiddleware(/* thunk, */ stringMiddleware),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
-);
+const store = configureStore({
+  reducer: {
+    heroes,
+    filters,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(stringMiddleware),
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
 export default store;

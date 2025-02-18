@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
-import { heroCreated } from '../../components/heroesList/heroesSlice';
+import { heroCreated } from '../heroesList/heroesSlice';
 import { useHttp } from '../../hooks/http.hook';
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать

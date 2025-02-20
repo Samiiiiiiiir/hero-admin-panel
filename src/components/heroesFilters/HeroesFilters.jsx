@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { useHttp } from '../../hooks/http.hook';
-import { fetchFilters } from '../../actions/index';
+import { fetchFilters } from '../../components/heroesFilters/filtersSlice';
 
 import { activeFilterChange } from './filtersSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,14 +12,13 @@ import { useDispatch, useSelector } from 'react-redux';
 // Представьте, что вы попросили бэкенд-разработчика об этом
 
 const HeroesFilters = () => {
-  const { request } = useHttp();
   const { filters, filtersLoadingStatus, activeFilter } = useSelector(
     (state) => state.filters
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchFilters(request));
+    dispatch(fetchFilters());
   }, []);
 
   return (

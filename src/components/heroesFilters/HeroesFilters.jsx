@@ -1,25 +1,24 @@
 import { useEffect } from 'react';
-import { fetchFilters } from '../../components/heroesFilters/filtersSlice';
+import {
+  fetchFilters,
+  selectAll,
+} from '../../components/heroesFilters/filtersSlice';
 
 import { activeFilterChange } from './filtersSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-// Задача для этого компонента:
-// Фильтры должны формироваться на основании загруженных данных
-// Фильтры должны отображать только нужных героев при выборе
-// Активный фильтр имеет класс active
-// Изменять json-файл для удобства МОЖНО!
-// Представьте, что вы попросили бэкенд-разработчика об этом
+import store from './../../store';
 
 const HeroesFilters = () => {
-  const { filters, filtersLoadingStatus, activeFilter } = useSelector(
+  const filters = selectAll(store.getState());
+  const { filtersLoadingStatus, activeFilter } = useSelector(
     (state) => state.filters
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchFilters());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="card shadow-lg mt-4">
@@ -36,7 +35,7 @@ const HeroesFilters = () => {
                 <button
                   key={item.id}
                   className={`btn ${item.className} ${
-                    activeFilter == item.name ? 'active' : ''
+                    activeFilter === item.name ? 'active' : ''
                   }`}
                   onClick={() => dispatch(activeFilterChange(item.name))}
                 >

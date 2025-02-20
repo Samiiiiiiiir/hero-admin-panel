@@ -4,20 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import { heroCreated } from '../heroesList/heroesSlice';
 import { useHttp } from '../../hooks/http.hook';
-// Задача для этого компонента:
-// Реализовать создание нового героя с введенными данными. Он должен попадать
-// в общее состояние и отображаться в списке + фильтроваться
-// Уникальный идентификатор персонажа можно сгенерировать через uiid
-// Усложненная задача:
-// Персонаж создается и в файле json при помощи метода POST
-// Дополнительно:
-// Элементы <option></option> желательно сформировать на базе
-// данных из фильтров
+import { selectAll } from '../heroesFilters/filtersSlice';
+import store from './../../store';
 
 const HeroesAddForm = () => {
-  const { filters, filtersLoadingStatus } = useSelector(
-    (state) => state.filters
-  );
+  const filters = selectAll(store.getState());
+  const { filtersLoadingStatus } = useSelector((state) => state.filters);
   const dispatch = useDispatch();
   const { request } = useHttp();
 
@@ -28,21 +20,22 @@ const HeroesAddForm = () => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const newHero = {
       id: uuidv4(),
       ...data,
     };
-    request('http://localhost:3001/heroes', 'POST', JSON.stringify(newHero))
-      .then(() => {
-        dispatch(heroCreated(newHero));
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        reset();
-      });
+    try {
+      const req = await request(
+        'http://localhost:3001/heroes',
+        'POST',
+        JSON.stringify(newHero)
+      );
+      dispatch(heroCreated(newHero));
+      reset();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -84,7 +77,7 @@ const HeroesAddForm = () => {
         <label htmlFor="element" className="form-label">
           Выбрать элемент героя
         </label>
-        {(filtersLoadingStatus === 'loading') === 0 && <div>Loading...</div>}
+        {filtersLoadingStatus === 'loading' && <div>Loading...</div>}
         {filtersLoadingStatus === 'idle' && filters.length && (
           <select
             className="form-select"

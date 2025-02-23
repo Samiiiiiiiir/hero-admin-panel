@@ -1,14 +1,9 @@
-import { useDispatch } from 'react-redux';
-
-import { heroDelete } from '../heroesList/heroesSlice';
-import { useHttp } from '../../hooks/http.hook';
+import { useDeleteHeroMutation } from '../../api/apiSlice';
 
 const HeroesListItem = ({ name, text, element, id }) => {
+  const [deleteHeroes] = useDeleteHeroMutation(id);
+
   let elementClassName;
-
-  const dispatch = useDispatch();
-
-  const { request } = useHttp();
 
   switch (element) {
     case 'fire':
@@ -28,9 +23,7 @@ const HeroesListItem = ({ name, text, element, id }) => {
   }
 
   function handleDelete() {
-    request(`http://localhost:3001/heroes/${id}`, 'DELETE')
-      .then(() => dispatch(heroDelete(id)))
-      .catch((err) => console.error(err));
+    deleteHeroes(id);
   }
 
   return (
@@ -62,22 +55,3 @@ const HeroesListItem = ({ name, text, element, id }) => {
 };
 
 export default HeroesListItem;
-
-/*     {
-      "id": 1,
-      "name": "Первый герой",
-      "description": "Первый герой в рейтинге!",
-      "element": "fire"
-    },
-    {
-      "id": 2,
-      "name": "Неизвестный герой",
-      "description": "Скрывающийся в тени",
-      "element": "wind"
-    },
-    {
-      "id": 3,
-      "name": "Морской герой",
-      "description": "Как аквамен, но не из DC",
-      "element": "water"
-    } */

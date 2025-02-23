@@ -1,27 +1,25 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import HeroesListItem from '../heroesListItem/HeroesListItem';
 import Spinner from '../spinner/Spinner';
-import {
-  fetchHeroes,
-  filteredHeroesSelector,
-} from '../../components/heroesList/heroesSlice';
+
+import { useGetHeroesQuery } from '../../api/apiSlice';
 
 const HeroesList = () => {
-  const filteredHeroes = useSelector(filteredHeroesSelector);
+  const { data: heroes, isFetching, isLoading, isError } = useGetHeroesQuery();
 
-  const heroesLoadingStatus = useSelector(
-    (state) => state.heroes.heroesLoadingStatus
-  );
-  const dispatch = useDispatch();
+  const activeFilter = useSelector((state) => state.filters.activeFilter);
 
-  useEffect(() => {
-    dispatch(fetchHeroes());
-  }, [dispatch]);
+  const filteredHeroes = useMemo(() => {
+    if (activeFilter === 'all') {
+      return heroes;
+    }
+    return heroes.filter((item) => item.element === activeFilter);
+  }, [heroes, activeFilter]);
 
-  if (heroesLoadingStatus === 'loading') {
+  if (isLoading || isFetching) {
     return <Spinner />;
-  } else if (heroesLoadingStatus === 'error') {
+  } else if (isError) {
     return <h5 className="text-center mt-5">Ошибка загрузки</h5>;
   }
 

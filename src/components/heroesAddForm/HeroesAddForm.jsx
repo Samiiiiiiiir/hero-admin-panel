@@ -1,13 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import { useSelector } from 'react-redux';
-import { selectAll } from '../heroesFilters/filtersSlice';
-import store from './../../store';
-import { useCreateHeroMutation } from '../../api/apiSlice';
+import { useCreateHeroMutation, useGetFiltersQuery } from '../../api/apiSlice';
 
 const HeroesAddForm = () => {
-  const filters = selectAll(store.getState());
-  const { filtersLoadingStatus } = useSelector((state) => state.filters);
+  const {
+    data: filters = [],
+    isLoading: filtersLoading,
+    isFetching: filtersFetching,
+    isSuccess: filtersLoaded,
+  } = useGetFiltersQuery();
+
   const {
     register,
     handleSubmit,
@@ -15,7 +17,7 @@ const HeroesAddForm = () => {
     reset,
   } = useForm();
 
-  const [createHero, { isLoading }] = useCreateHeroMutation();
+  const [createHero] = useCreateHeroMutation();
 
   const onSubmit = async (data) => {
     const newHero = {
@@ -65,8 +67,8 @@ const HeroesAddForm = () => {
         <label htmlFor="element" className="form-label">
           Выбрать элемент героя
         </label>
-        {filtersLoadingStatus === 'loading' && <div>Loading...</div>}
-        {filtersLoadingStatus === 'idle' && filters.length && (
+        {(filtersLoading || filtersFetching) && <div>Loading...</div>}
+        {filtersLoaded && filters.length && (
           <select
             className="form-select"
             {...register('element', { required: true })}

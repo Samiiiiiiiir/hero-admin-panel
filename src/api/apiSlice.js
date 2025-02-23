@@ -25,6 +25,9 @@ export const apiSlice = createApi({
       invalidatesTags: ['Heroes'],
       // чтобы после удаления автоматически все обновлялось
     }),
+    getFilters: builder.query({
+      query: () => '/filters',
+    }),
   }),
 });
 
@@ -32,4 +35,5 @@ export const {
   useGetHeroesQuery,
   useCreateHeroMutation,
   useDeleteHeroMutation,
+  useGetFiltersQuery,
 } = apiSlice;

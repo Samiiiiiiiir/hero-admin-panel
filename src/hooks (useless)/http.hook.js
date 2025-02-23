@@ -1,4 +1,4 @@
-export const useHttp = () => {
+/* export const useHttp = () => {
   const request = async (
     url,
     method = 'GET',
@@ -22,3 +22,4 @@ export const useHttp = () => {
     request,
   };
 };
+ */
